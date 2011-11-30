@@ -24,9 +24,10 @@ def create(request):
 
     if not form.is_valid():
         context = RequestContext(request, {'form': form})
-	return render_to_response('subscriptions/new.html', context)
+        return render_to_response('subscriptions/new.html', context)
 
     subscription = form.save()
+
     send_mail(subject=u'Cadastro no EventeX realizado com sucesso',
               message=u'Obrigado pela sua inscrição!',
               from_email=settings.DEFAULT_FROM_EMAIL,
