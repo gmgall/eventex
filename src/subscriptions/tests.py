@@ -48,7 +48,8 @@ class FormTest(TestCase):
             'name': 'Guilherme Gall',
             'cpf': '12345678901',
             'email': 'gmgall@gmail.com',
-            'phone': '24-88499266'
+            'phone_0': '24',
+            'phone_1': '88499266',
         })
         self.assertTrue(form.is_valid())
 
@@ -57,7 +58,8 @@ class FormTest(TestCase):
             'name': '',
             'cpf': '12345678901',
             'email': 'gmgall@gmail.com',
-            'phone': '24-88499266'
+            'phone_0': '24',
+            'phone_1': '88499266',
         })
         self.assertFalse(form.is_valid())
 
@@ -66,7 +68,8 @@ class FormTest(TestCase):
             'name': 'Guilherme Gall',
             'cpf': '',
             'email': 'gmgall@gmail.com',
-            'phone': '24-88499266'
+            'phone_0': '24',
+            'phone_1': '88499266',
         })
         self.assertFalse(form.is_valid())
 
@@ -75,16 +78,18 @@ class FormTest(TestCase):
             'name': 'Guilherme Gall',
             'cpf': '12345678901',
             'email': '',
-            'phone': '24-88499266'
+            'phone_0': '24',
+            'phone_1': '88499266',
         })
-        self.assertFalse(form.is_valid())
+        self.assertTrue(form.is_valid())
 
     def test_subscription_without_phone(self):
         form = SubscriptionForm({
             'name': 'Guilherme Gall',
             'cpf': '12345678901',
             'email': 'gmgall@gmail.com',
-            'phone': ''
+            'phone_0': '',
+            'phone_1': ''
         })
         self.assertTrue(form.is_valid())
 

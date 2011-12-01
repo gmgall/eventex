@@ -19,7 +19,7 @@ class PhoneWidget(forms.MultiWidget):
 
 
 class PhoneField(forms.MultiValueField):
-    widget = PhoneWidget
+    widget = PhoneWidget()
 
     def __init__(self, *args, **kwargs):
         fields = (
@@ -38,7 +38,7 @@ class PhoneField(forms.MultiValueField):
 
 
 class SubscriptionForm(forms.ModelForm):
-    phone = PhoneField()
+    phone = PhoneField(required=False)
 
     class Meta:
         model = Subscription
