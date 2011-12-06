@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block aside %}
+{% if speaker.avatar %}
+	<aside>
+	<img src="{{ speaker.avatar.url }}" alt="{{ speaker.name }}" />
+	</aside>
+{% endif %}
+{% endblock aside %}
+
+{% block content %}
+<h2><a href="{{ speaker.url }}">{{ speaker.name }}</a></h2>
+<p>{{ speaker.description }}</p>
+{% endblock content %}

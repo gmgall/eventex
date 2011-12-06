@@ -49,7 +49,7 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
    Links
    ========================================================================== */
 
-a { color: #FFFFFF; }
+a { color: #000000; }
 a:visited { color: #551a8b; }
 a:focus { outline: thin dotted; }
 
