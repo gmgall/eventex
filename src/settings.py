@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'south',
     'core',
     'subscriptions',
+    'embed',
 )
 
 # A sample logging configuration. The only tangible logging
