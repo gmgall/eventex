@@ -1,6 +1,8 @@
+import datetime
 from django.db import models
 from django.utils.translation import ugettext as _
 
+# Managers
 
 class KindContactManager(models.Manager):
     def __init__(self, kind):
@@ -11,6 +13,46 @@ class KindContactManager(models.Manager):
         qs = super(KindContactManager, self).get_query_set()
         return qs.filter(kind=self.kind)
 
+class PeriodManager(models.Manager):
+    midday = datetime.time(12)
+
+    def at_morning(self):
+        qs = self.filter(start_time__lt=self.midday)
+        return qs.order_by('start_time')
+
+    def at_afternoon(self):
+        qs = self.filter(start_time__gte=self.midday)
+        return qs.order_by('start_time')
+
+# Models
+
+class Talk(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    start_time = models.TimeField(blank=True)
+    speakers = models.ManyToManyField('Speaker')
+
+    objects = PeriodManager()
+
+    def __unicode__(self):
+        return unicode(self.title)
+
+# Multi-table inheritance
+
+class Course(Talk):
+    slots = models.IntegerField()
+    notes = models.TextField()
+
+    objects = PeriodManager()
+
+# Proxy inheritance
+
+class CodingCourse(Course):
+    class Meta:
+        proxy = True
+
+    def do_some_python_stuff(self):
+        return "Let's hack at %s" % self.title
 
 class Speaker(models.Model):
     name = models.CharField(max_length=255)
