@@ -28,6 +28,6 @@ def talk_detail(request, talk_id):
     talk = get_object_or_404(Talk, id=talk_id)
     return direct_to_template(request, 'core/talk_detail.html', {
         'talk': talk,
-        'slides': Talk.media_set.filter(type='SL'),
-        'videos': Talk.media_set.filter(type='YT'),
+        'slides': talk.media_set.filter(type='SL'),
+        'videos': talk.media_set.filter(type='YT'),
     })
