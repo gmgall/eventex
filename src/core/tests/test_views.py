@@ -1,16 +1,23 @@
+import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from core.models import Speaker
+from core.models import Speaker, Talk
 
 class ViewTest(TestCase):
 
     def setUp(self):
-        s = Speaker.objects.create(
+        self.s = Speaker.objects.create(
             name = 'Guilherme Gall',
             slug = 'guilherme-gall',
             url = 'http://gmgall.wordpress.com/'
         )
-        s.contact_set.create(kind='E', value='gmgall@gmail.com')
+        self.s.contact_set.create(kind='E', value='gmgall@gmail.com')
+
+        self.t = Talk.objects.create(
+            title = 'Palestra',
+            start_time = datetime.datetime.now()
+        )
+        self.t.speakers.add(self.s)
 
     def test_homepage(self):
         response = self.client.get('/')
@@ -21,7 +28,7 @@ class ViewTest(TestCase):
 
     def test_show_speaker_detail(self):
         response = self.client.get(reverse('core:speaker_detail',
-            args=['guilherme-gall']))
+            args=[self.s.slug]))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'core/speaker_detail.html')
 
@@ -29,3 +36,10 @@ class ViewTest(TestCase):
         response = self.client.get(reverse('core:talks'))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'core/talks.html')
+
+    def test_show_talk_detail(self):
+        response = self.client.get(reverse('core:talk_detail', args=[1]))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'core/talk_detail.html')
+        self.assertContains(response, self.t.title)
+        self.assertContains(response, self.s.name)
