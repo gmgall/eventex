@@ -24,3 +24,8 @@ class ViewTest(TestCase):
             args=['guilherme-gall']))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'core/speaker_detail.html')
+
+    def test_show_talks(self):
+        response = self.client.get(reverse('core:talks'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'core/talks.html')

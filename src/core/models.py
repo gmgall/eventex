@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -25,6 +26,20 @@ class PeriodManager(models.Manager):
         return qs.order_by('start_time')
 
 # Models
+
+class Media(models.Model):
+    MEDIAS = (
+        ('SL', 'SlideShare'),
+        ('YT', 'Youtube'),
+    )
+
+    talk = models.ForeignKey('Talk')
+    type = models.CharField(max_length=3, choices=MEDIAS)
+    title = models.CharField(u'Título', max_length=255)
+    media_id = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.talk.title, self.title)
 
 class Talk(models.Model):
     title = models.CharField(max_length=200)
