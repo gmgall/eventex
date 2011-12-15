@@ -35,19 +35,25 @@ class Media(models.Model):
 
     talk = models.ForeignKey('Talk')
     type = models.CharField(max_length=3, choices=MEDIAS)
-    title = models.CharField(u'Título', max_length=255)
+    title = models.CharField(_(u'Título'), max_length=255)
     media_id = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = _(u'Mídia')
 
     def __unicode__(self):
         return u'%s - %s' % (self.talk.title, self.title)
 
 class Talk(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    start_time = models.TimeField(blank=True)
-    speakers = models.ManyToManyField('Speaker')
+    title = models.CharField(_(u'Título'), max_length=200)
+    description = models.TextField(_(u'Descrição') )
+    start_time = models.TimeField(_(u'Horário'), blank=True)
+    speakers = models.ManyToManyField('Speaker', verbose_name=_('Palestrante'))
 
     objects = PeriodManager()
+
+    class Meta:
+        verbose_name = _(u'Palestra')
 
     def __unicode__(self):
         return unicode(self.title)
@@ -60,6 +66,9 @@ class Course(Talk):
 
     objects = PeriodManager()
 
+    class Meta:
+        verbose_name = _(u'Curso')
+
 # Proxy inheritance
 
 class CodingCourse(Course):
@@ -70,11 +79,14 @@ class CodingCourse(Course):
         return "Let's hack at %s" % self.title
 
 class Speaker(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(_('Nome'), max_length=255)
     slug = models.SlugField(unique=True)
     url = models.URLField(verify_exists=False)
-    description = models.TextField(blank=True)
-    avatar = models.FileField(upload_to='palestrantes', blank=True, null=True)
+    description = models.TextField(_(u'Descrição'), blank=True)
+    avatar = models.FileField(_(u'Foto'), upload_to='palestrantes', blank=True, null=True)
+
+    class Meta:
+        verbose_name = _(u'Palestrante')
 
     def __unicode__(self):
         return self.name
@@ -87,14 +99,17 @@ class Contact(models.Model):
         ('F', _('Fax')),
     )
 
-    speaker = models.ForeignKey('Speaker', verbose_name=_('Palestrante'))
-    kind = models.CharField(max_length=1, choices=KINDS)
-    value = models.CharField(max_length=255)
+    speaker = models.ForeignKey('Speaker', verbose_name=_(u'Palestrante'))
+    kind = models.CharField(_('Tipo'), max_length=1, choices=KINDS)
+    value = models.CharField(_('Valor'), max_length=255)
 
     objects = models.Manager()
     phones = KindContactManager('P')
     emails = KindContactManager('E')
     faxes = KindContactManager('F')
 
+    class Meta:
+        verbose_name = _(u'Contato')
+
     def __unicode__(self):
-        return self.kind+', '+self.value
+        return '%s, %s' %(self.kind, self.value)

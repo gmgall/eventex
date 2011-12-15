@@ -38,7 +38,7 @@ class PhoneField(forms.MultiValueField):
 
 
 class SubscriptionForm(forms.ModelForm):
-    phone = PhoneField(required=False)
+    phone = PhoneField(label=_('Telefone'), required=False)
 
     class Meta:
         model = Subscription
